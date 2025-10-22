@@ -1,0 +1,30 @@
+{
+  "name": "fernando/laravel-arc",
+  "description": "ARC – fila, jobs e serviços compartilháveis",
+  "type": "library",
+  "license": "MIT",
+  "version": "0.0.1",
+  "autoload": {
+    "psr-4": {
+      "Fernando\\Arc\\": "src/"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "Fernando\\Arc\\ArcServiceProvider"
+      ],
+      "aliases": {
+        "Arc": "Fernando\\Arc\\Support\\Facades\\Arc"
+      }
+    }
+  },
+  "require": {
+    "php": "^8.2",
+    "illuminate/support": "^12.0",
+    "illuminate/database": "^12.0",
+    "illuminate/queue": "^12.0"
+  },
+  "minimum-stability": "stable",
+  "prefer-stable": true
+}
