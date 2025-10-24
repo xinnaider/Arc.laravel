@@ -26,6 +26,7 @@ class ArcJob extends Model
     {
         $pending = self::pending()
             ->where('queue', $queue)
+            ->where('attempts', '<', 'max_attempts')
             ->orderBy('created_at', 'asc')
             ->first();
 
@@ -42,6 +43,18 @@ class ArcJob extends Model
     {
         return new $this->jobable_type;
     }
+
+    public function addAttempt(): void
+    {
+        $this->attempts += 1;
+        $this->save();
+    }
+
+    public function ratedOutOfAttempts(): bool
+    {
+        return $this->attempts >= $this->max_attempts;
+    }
+
 
     public function scopePending($q) { return $q->where('status', self::STATUS_PENDING); }
     public function scopeRunning($q) { return $q->where('status', self::STATUS_RUNNING); }
