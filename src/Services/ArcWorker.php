@@ -22,13 +22,9 @@ class ArcWorker
                 $jobable->handle($job);
                 $job->update(['status' => ArcJob::STATUS_SUCCESS]);
             } catch (\Exception $e) {
-                if ($job->ratedOutOfAttempts()) {
-                    $job->update(['status' => ArcJob::STATUS_FAILED]);
-                } else {
-                    $job->update(['status' => ArcJob::STATUS_PENDING]);
-                }
-
                 $job->update(['status' => ArcJob::STATUS_FAILED, 'trace' => $e->getTraceAsString()]);
+
+                $job->retryIfCan();
             }
         } else {
             $job->update(['status' => 'failed', 'trace' => 'Jobable does not implement ArcSpecs']);

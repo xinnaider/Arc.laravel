@@ -50,9 +50,20 @@ class ArcJob extends Model
         $this->save();
     }
 
-    public function ratedOutOfAttempts(): bool
+    public function retryIfCan(): void
     {
-        return $this->attempts >= $this->max_attempts;
+        if ($this->attempts < $this->max_attempts) {
+            ArcJob::create([
+                'jobable_type' => $this->jobable_type,
+                'details' => $this->details,
+                'status' => self::STATUS_PENDING,
+                'max_attempts' => $this->max_attempts,
+                'child_job_id' => $this->id,
+                'attempts' => $this->attempts++,
+            ]);
+        } else {
+            // Max attempts reached, do nothing
+        }
     }
 
 

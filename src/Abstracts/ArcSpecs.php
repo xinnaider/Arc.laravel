@@ -14,7 +14,7 @@ abstract class ArcSpecs
 
         ArcJob::create([
             'jobable_type' => $class,
-            'details' => json_encode($args),
+            'details' => $args,
             'status' => ArcJob::STATUS_PENDING,
         ]);
     }
